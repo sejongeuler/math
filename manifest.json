@@ -1,0 +1,15 @@
+{
+  "name": "제8회 창의융합교육축제",
+  "short_name": "창의융합축제",
+  "description": "2026. 10. 29.(목)–30.(금) 정부세종컨벤션센터 · 체험부스 안내",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0E7E7C",
+  "theme_color": "#0E7E7C",
+  "lang": "ko",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
