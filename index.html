@@ -44,6 +44,7 @@
   --f3:#8A6205; --f3t:#FEEBB8;   /* 정보 · 노랑 */
   --f4:#2F7A2F; --f4t:#E2F0DF;   /* 환경 · 연두 */
   --fc:#2F7FA8; --fct:#D0E8F0;   /* 수학체험센터 · 하늘 */
+  --fi:#7D4E88; --fit:#EBDDEC;   /* 발명부스 · 연보라 (리플렛 #DABEDC를 밝게) */
   --m1:#3FA96A; --m2:#5568B8; --m3:#E2A21E; --m4:#E05457; --m5:#9E77BF;
   --shadow:0 1px 2px rgba(10,50,60,.07), 0 10px 28px rgba(10,50,60,.10);
 }
@@ -60,6 +61,7 @@
     --f3:#E0B23A; --f3t:#4E3F12;
     --f4:#6FB56F; --f4t:#23402A;
     --fc:#5AA6D0; --fct:#1E3A4A;
+    --fi:#C39BCB; --fit:#3A2A40;
     --m1:#5CC27E; --m2:#8FA3F0; --m3:#F0B95A; --m4:#F07A7C; --m5:#C09BDD;
     --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.45);
   }
@@ -76,6 +78,7 @@
   --f3:#E0B23A; --f3t:#4E3F12;
   --f4:#6FB56F; --f4t:#23402A;
   --fc:#5AA6D0; --fct:#1E3A4A;
+  --fi:#C39BCB; --fit:#3A2A40;
   --m1:#5CC27E; --m2:#8FA3F0; --m3:#F0B95A; --m4:#F07A7C; --m5:#C09BDD;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.45);
 }
@@ -509,6 +512,14 @@ main{position:relative}
 .tile{padding:13px 14px;border-radius:10px;background:var(--surface);border:1px solid var(--line)}
 .tile b{display:block;font-size:14.5px;font-weight:600}
 .tile span{font-size:12px;color:var(--ink-2)}
+/* 누를 수 있는 타일(발명부스 포스터) */
+.tile-btn{appearance:none;font:inherit;color:inherit;text-align:left;cursor:pointer;position:relative;display:block;width:100%;transition:transform .15s ease,box-shadow .15s ease}
+.tile-btn .tgo{display:block;margin-top:8px;font-size:12px;font-weight:700;font-style:normal;color:var(--panel)}
+#invTile{background:var(--fit);border-color:color-mix(in srgb,var(--fi) 22%,var(--fit))}
+#invTile .tgo,#invTile .pb{color:var(--fi)}
+#invTile .pb{background:color-mix(in srgb,var(--surface) 70%,transparent);border-color:color-mix(in srgb,var(--fi) 30%,transparent)}
+.tile-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.tile-btn .pb{position:absolute;top:10px;right:10px;font-size:10.5px;font-weight:700;letter-spacing:.02em;color:var(--panel);background:color-mix(in srgb,var(--panel) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--panel) 30%,var(--surface));padding:2px 7px;border-radius:999px}
 
 
 /* ── 부스 상세 · 포스터 모달 ── */
@@ -524,6 +535,11 @@ main{position:relative}
 .mhead .dx{margin-left:auto;appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font-size:13px;cursor:pointer;width:32px;height:32px;border-radius:8px;flex:none}
 .pframe{margin:0 18px;background:var(--surface-2);border:1px solid var(--line-2);border-radius:10px;min-height:220px;display:grid;place-items:center;overflow:hidden}
 .pframe img{display:block;width:100%;height:auto;max-height:72vh;object-fit:contain}
+/* 여러 장짜리 포스터: 세로로 이어 붙이고 각 장 위에 쪽수 */
+.pframe.multi{display:block;max-height:72vh;overflow:auto;-webkit-overflow-scrolling:touch}
+.pframe.multi img{max-height:none}
+.pframe.multi img + .pno{margin-top:10px}
+.pframe .pno{display:block;font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-size:11.5px;font-weight:600;color:var(--ink-3);padding:6px 10px 4px;background:var(--surface-2);border-bottom:1px solid var(--line-2)}
 .pframe .pph{display:grid;gap:6px;place-items:center;text-align:center;padding:36px 20px;color:var(--ink-3);font-size:13.5px}
 .pframe .pph b{color:var(--ink-2);font-size:15px;font-weight:600}
 .pframe .pph small{font-size:12px}
@@ -824,7 +840,7 @@ footer b{color:var(--ink-2);font-weight:600}
       <div class="tiles">
         <div class="tile"><b>안내부스</b><span>입구 앞 · 홀 하단 왼쪽</span></div>
         <div class="tile"><b>보건부스</b><span>홀 하단 왼쪽 끝</span></div>
-        <div class="tile"><b>발명부스</b><span>모두가 함께 나누는 발명세상 · 발명 체험 3부스 · 보건부스 옆</span></div>
+        <button type="button" class="tile tile-btn" id="invTile" aria-label="발명부스 포스터 보기"><b>발명부스</b><span>모두가 함께 나누는 발명세상 · 발명 체험 3부스 · 보건부스 옆</span><em class="tgo">포스터 보기 ›</em></button>
         <div class="tile"><b>포토존</b><span>발명부스 옆 · 로비 주출입구 왼쪽</span></div>
         <div class="tile"><b>부스별 산출물 전시</b><span>로비 주출입구 오른쪽</span></div>
         <div class="tile"><b>수학구조물대회 수상작</b><span>2층 로비 · 산출물 전시 옆</span></div>
@@ -1023,7 +1039,8 @@ var CONFIG = {
 
   // 부스별 포스터 — 아래 폴더 구조로 이미지를 올리면 부스 목록·배치도에서 볼 수 있습니다.
   //   posters/thu/math-01.jpg   → 10/29(목) 수학-1        posters/fri/info-07.jpg → 10/30(금) 정보-7
-  //   분야 코드: 수학 math · 과학융합 sci · 정보 info · 환경 env · 수학체험센터 center   (번호는 두 자리)
+  //   분야 코드: 수학 math · 과학융합 sci · 정보 info · 환경 env   (번호는 두 자리)
+  //   두 장 이상이면 2쪽부터 -2, -3 … 을 붙입니다: math-01.jpg (1쪽) · math-01-2.jpg (2쪽) · math-01-3.jpg (3쪽)
   //   파일 확장자를 png로 통일했다면 ext를 'png'로 바꾸세요.
   posters: { dir:'posters', ext:'jpg' },
 
@@ -1490,10 +1507,10 @@ function select(i, isSide, reveal){
 /* ══ 부스 포스터 · 상세 모달 ══ */
 var FCODE = { '수학':'math', '과학융합':'sci', '정보':'info', '환경':'env' };
 var posterCache = {};
-function posterUrl(day, bt){
+function posterUrl(day, bt, page){
   var p = CONFIG.posters || { dir:'posters', ext:'jpg' };
   var code = bt[1] === 0 ? 'center' : FCODE[bt[0]] + '-' + (bt[1] < 10 ? '0' : '') + bt[1];
-  return p.dir + '/' + day + '/' + code + '.' + p.ext;
+  return p.dir + '/' + day + '/' + code + (page > 1 ? '-' + page : '') + '.' + p.ext;   // 2쪽부터 math-01-2.jpg, math-01-3.jpg …
 }
 function probePoster(url, cb){
   if (url in posterCache) { cb(posterCache[url]); return; }
@@ -1512,17 +1529,75 @@ function openBooth(i, isSide){
   document.getElementById('mMeta').textContent = [bt[2], ctr ? '수학 체험 부스' : bt[0] + ' 부스', day.d + '(' + day.w + ') ' + ((CONFIG.hours || {})[state.day] || '')].filter(Boolean).join(' · ');
   var frame = document.getElementById('mFrame'), url = posterUrl(state.day, bt);
   frame.innerHTML = '<div class="loading">포스터를 불러오는 중…</div>';
-  var img = new Image();
+  var img = new Image(), token = (openBooth.token = (openBooth.token || 0) + 1);
   img.alt = (bt[3] || '') + ' 포스터';
-  img.onload = function(){ frame.innerHTML = ''; frame.appendChild(img); posterCache[url] = true; };
-  img.onerror = function(){ posterCache[url] = false;
+  img.onload = function(){
+    if (token !== openBooth.token) return;                 // 그사이 다른 부스를 열었으면 무시
+    frame.innerHTML = ''; frame.appendChild(img); posterCache[url] = true;
+    // 여러 장짜리 포스터: -2, -3 … 파일이 있는 만큼 아래로 이어 붙이고 쪽수 표시
+    var pages = [img];
+    (function more(n){
+      if (n > (CONFIG.posters && CONFIG.posters.maxPages || 10)) return;
+      var u = posterUrl(state.day, bt, n), im = new Image();
+      im.alt = (bt[3] || '') + ' 포스터 ' + n + '쪽';
+      im.onload = function(){
+        if (token !== openBooth.token) return;
+        pages.push(im); frame.appendChild(im);
+        if (pages.length === 2) { pages[0].insertAdjacentHTML('beforebegin', '<span class="pno">1 / ?</span>'); }
+        pages.forEach(function(p, k){ var tag = p.previousElementSibling; if (!tag || !tag.classList.contains('pno')) { p.insertAdjacentHTML('beforebegin', '<span class="pno"></span>'); tag = p.previousElementSibling; } tag.textContent = (k + 1) + ' / ' + pages.length; });
+        frame.classList.add('multi');
+        more(n + 1);
+      };
+      im.onerror = function(){};
+      im.src = u;
+    })(2);
+  };
+  img.onerror = function(){ posterCache[url] = false; if (token !== openBooth.token) return;
     frame.innerHTML = '<div class="pph"><b>포스터 준비 중</b><span>부스 포스터가 완성되면 여기에서 볼 수 있습니다.</span></div>'; };
+  frame.classList.remove('multi');
   img.src = url;
+  document.getElementById('mMap').hidden = false;
   document.getElementById('mMap').onclick = function(){ closeModal(); go('program', 'map'); setTimeout(function(){ select(i, isSide, true); }, 60); };
   modalReturn = document.activeElement;
   m.hidden = false; document.body.style.overflow = 'hidden';
   document.getElementById('mClose').focus();
 }
+/* ══ 발명부스 포스터 — posters/inv/inv-01.jpg, inv-02.jpg … 를 한 번에 이어서 보여 줌 ══ */
+function invUrl(n){ var p = CONFIG.posters || { dir:'posters', ext:'jpg' }; return p.dir + '/inv/inv-' + (n < 10 ? '0' : '') + n + '.' + p.ext; }
+function openInvention(){
+  var m = document.getElementById('modal'), sheet = m.querySelector('.sheet');
+  sheet.style.setProperty('--c', 'var(--fi)'); sheet.style.setProperty('--ct', 'var(--fit)');   // 리플렛의 발명부스 연보라
+  document.getElementById('mNo').textContent = '발명';
+  document.getElementById('mTitle').textContent = '모두가 함께 나누는 발명세상';
+  document.getElementById('mMeta').textContent = '발명부스 · 발명 체험 3부스 · 홀 하단 보건부스 옆 · 10. 29.(목) – 10. 30.(금)';
+  var frame = document.getElementById('mFrame'), token = (openBooth.token = (openBooth.token || 0) + 1);
+  frame.className = 'pframe'; frame.innerHTML = '<div class="loading">포스터를 불러오는 중…</div>';
+  var pages = [];
+  (function next(n){
+    if (n > 20) return;
+    var im = new Image(); im.alt = '발명부스 포스터 ' + n;
+    im.onload = function(){
+      if (token !== openBooth.token) return;
+      if (!pages.length) frame.innerHTML = '';
+      pages.push(im); frame.appendChild(im);
+      if (pages.length > 1) { frame.classList.add('multi');
+        pages.forEach(function(p, k){ var tag = p.previousElementSibling; if (!tag || !tag.classList.contains('pno')) { p.insertAdjacentHTML('beforebegin', '<span class="pno"></span>'); tag = p.previousElementSibling; } tag.textContent = (k + 1) + ' / ' + pages.length; }); }
+      next(n + 1);
+    };
+    im.onerror = function(){ if (token !== openBooth.token) return;
+      if (!pages.length) frame.innerHTML = '<div class="pph"><b>포스터 준비 중</b><span>발명부스 포스터가 완성되면 여기에서 볼 수 있습니다.</span></div>'; };
+    im.src = invUrl(n);
+  })(1);
+  document.getElementById('mMap').hidden = true;                 // 발명부스는 배치도 칸이 없음
+  modalReturn = document.activeElement;
+  m.hidden = false; document.body.style.overflow = 'hidden';
+  document.getElementById('mClose').focus();
+}
+(function initInvention(){
+  var t = document.getElementById('invTile'); if (!t) return;
+  t.addEventListener('click', openInvention);
+  probePoster(invUrl(1), function(ok){ if (ok) { var tag = document.createElement('span'); tag.className = 'pb'; tag.textContent = '포스터'; t.appendChild(tag); } });
+})();
 function closeModal(){
   var m = document.getElementById('modal'); if (m.hidden) return;
   m.hidden = true; document.body.style.overflow = '';
