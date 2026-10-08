@@ -270,6 +270,9 @@ main{position:relative}
 .cta:hover{opacity:.9}
 .cta.ghost{background:transparent;color:var(--link);border:1px solid var(--line);margin-left:6px}
 /* 소개 화면 길잡이(5번): 글자 + 라임 밑줄 + 청록 화살표. 올리면 밑줄이 화살표까지 이어지고 화살표가 앞으로 */
+.ilinks{display:grid;justify-items:start;gap:6px;margin-top:22px}
+.ilinks .textlink{margin-top:0}
+a.textlink{text-decoration:none}
 .textlink{position:relative;appearance:none;border:0;background:none;padding:6px 0;margin-top:22px;cursor:pointer;
   display:inline-flex;align-items:center;gap:8px;color:var(--ink);font-weight:700;font-size:15.5px}
 .textlink .tl-arr{width:20px;height:20px;flex:none;color:var(--panel);transition:transform .25s ease}
@@ -747,7 +750,11 @@ footer b{color:var(--ink-2);font-weight:600}
           <dt>주최·주관</dt><dd>세종특별자치시교육청</dd>
           <dt>후원</dt><dd>교육부</dd>
         </dl>
-        <button type="button" class="textlink" data-go="program/map">부스 배치도 보기<svg class="tl-arr" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5"/></svg></button>
+        <div class="ilinks">
+          <button type="button" class="textlink" data-go="program/map">부스 배치도 보기<svg class="tl-arr" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5"/></svg></button>
+          <!-- 만족도 조사: 스크립트 맨 위 CONFIG.survey 에 구글 설문 주소를 넣으면 나타남 -->
+          <a class="textlink" id="surveyLink" href="#" target="_blank" rel="noopener" hidden>만족도 조사<svg class="tl-arr" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8"/></svg></a>
+        </div>
       </div>
     </div>
 
@@ -1051,6 +1058,9 @@ var CONFIG = {
   // 파일이 없으면 페이지 안에 담긴 축소판을 보여 줍니다. 파일 이름을 바꾸려면 body의 <img class="lfimg"> src와 저장 링크도 함께 바꾸세요.
   // 인쇄용 PDF가 있으면 아래에 파일 이름을 넣으세요. 예: 'leaflet/leaflet.pdf' → 소개 페이지에 PDF 내려받기 카드가 생깁니다.
   leaflet: '',
+
+  // 만족도 조사 — 설문 주소(축제 만족도 조사 QR과 같은 주소). 소개 화면 '부스 배치도 보기' 아래에 링크가 생깁니다. 비워 두면 링크가 보이지 않음.
+  survey: 'https://ksurv.kr/aUM3Njw-Pzw',
 
   // 공지사항 — 위에 있는 것이 먼저 보입니다. d는 날짜(비워도 됨), tag는 말머리(비워도 됨)
   notices: [
@@ -1825,6 +1835,12 @@ document.querySelectorAll('[data-hours]').forEach(function(el){
       lbScroll.scrollTo(Math.max(0, fx * w - lbScroll.clientWidth / 2), Math.max(0, fy * h - lbScroll.clientHeight / 2));
     } else lbScroll.scrollTo(0, 0);
   });
+})();
+(function renderSurvey(){
+  var a = document.getElementById('surveyLink'); if (!a) return;
+  var u = (CONFIG.survey || '').trim();
+  if (!u) return;
+  a.href = u; a.hidden = false;
 })();
 (function renderFieldPills(){
   var host = document.getElementById('fieldpills'); if (!host) return;
