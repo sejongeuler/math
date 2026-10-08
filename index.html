@@ -545,6 +545,7 @@ main{position:relative}
 .pframe .pph small{font-size:12px}
 .pframe .loading{color:var(--ink-3);font-size:13px;padding:36px}
 .mfoot{display:flex;gap:8px;justify-content:flex-end;padding:14px 18px 18px}
+.mfoot:has(> [hidden]:only-child){padding:0 0 16px}   /* 링크가 숨겨지면 아래 여백만 남김 */
 .mfoot .cta{margin:0;padding:10px 16px;font-size:14px}
 .mfoot .textlink{margin-top:0}
 .bcard{position:relative}
@@ -1377,7 +1378,7 @@ function makeCell(i, isSide){
   var b = document.createElement('button');
   b.type = 'button'; b.className = 'cell'; b.dataset.i = i; b.dataset.side = isSide ? '1' : '';
   b.innerHTML = '<span class="no"></span><span class="sch"></span>';
-  b.addEventListener('click', function(){ select(i, isSide); });
+  b.addEventListener('click', function(){ select(i, isSide); openBooth(i, isSide); });   // 부스 목록처럼 누르면 바로 포스터 모달
   cells.push(b);
   return b;
 }
@@ -1485,7 +1486,7 @@ function renderDetail(){
   el.hidden = false; el.style.setProperty('--c', f.c); el.style.setProperty('--ct', f.t);
   el.innerHTML = '<span class="dno">' + (ctr ? '수학체험센터' : bt[1]) + '</span>' +
     '<span class="dtxt"><span class="dsch">' + esc(bt[3] || bt[2] || '프로그램 미정') + '</span><span class="dmeta">' + esc(meta.join(' · ')) + '</span></span>' +
-    '<span class="dgo">포스터 · 상세 보기 <i>›</i></span>' +
+    '<span class="dgo">포스터 다시 보기 <i>›</i></span>' +
     '<button type="button" class="dx" aria-label="닫기">✕</button>';
   el.setAttribute('role', 'button'); el.tabIndex = 0;
   el.onclick = function(e){ if (e.target.closest('.dx')) return; openBooth(state.sel.i, state.sel.side); };
@@ -1558,7 +1559,8 @@ function openBooth(i, isSide){
     frame.innerHTML = '<div class="pph"><b>포스터 준비 중</b><span>부스 포스터가 완성되면 여기에서 볼 수 있습니다.</span></div>'; };
   frame.classList.remove('multi');
   img.src = url;
-  document.getElementById('mMap').hidden = false;
+  // 배치도에서 연 모달에는 '배치도에서 위치 보기'가 필요 없음 (이미 그 칸이 강조되어 있음)
+  document.getElementById('mMap').hidden = (cur.page === 'program' && cur.sub === 'map');
   document.getElementById('mMap').onclick = function(){ closeModal(); go('program', 'map'); setTimeout(function(){ select(i, isSide, true); }, 60); };
   modalReturn = document.activeElement;
   m.hidden = false; document.body.style.overflow = 'hidden';
