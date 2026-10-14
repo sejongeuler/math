@@ -307,6 +307,7 @@ a.textlink{text-decoration:none}
 .lbscroll img.zoom{max-width:none;max-height:none;width:auto;height:auto;cursor:zoom-out}
 @media(max-width:699px) and (orientation:portrait){
   .lbscroll img.fit{height:calc(100vh - 90px);height:calc(100dvh - 90px);width:auto;max-width:none}
+  .lightbox.portrait .lbscroll img.fit{height:auto;width:auto;max-width:calc(100% - 20px);max-height:calc(100dvh - 80px)}
   .lbhint{display:none}
 }
 .leaflet{display:flex;gap:16px;align-items:center;padding:18px 20px;flex-wrap:wrap}
@@ -374,12 +375,30 @@ a.textlink{text-decoration:none}
 .search .s-ico{width:17px;height:17px;flex:none;color:var(--ink-3)}
 .search input{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:14px;color:var(--ink);outline:none;height:100%}
 /* 스마트폰: 입력 글자를 16px로 — 아이폰 사파리가 작은 글자 입력창에 초점을 주면 화면을 확대해 버리는 것을 막음 */
-@media(max-width:699px){.search{width:min(100%,300px)}.search input{font-size:16px}.search input::placeholder{font-size:14px}}
+@media(max-width:699px){.srow{width:min(100%,360px)}.search input{font-size:16px}.search input::placeholder{font-size:14px}}
 .search input::placeholder{color:var(--ink-3)}
 .search input::-webkit-search-cancel-button{display:none}
 .search .s-x{appearance:none;border:0;background:var(--surface-2);color:var(--ink-2);width:24px;height:24px;border-radius:50%;font-size:12px;cursor:pointer;display:grid;place-items:center}
 .search .s-x:hover{background:var(--line)}
 .srnote{margin:0 0 12px;font-size:13px;color:var(--ink-2);font-weight:600}
+/* ★ 내 부스 */
+:root{--star:#E0A400;--star-bg:#FFF3C4;--star-ink:#8A6205}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--star:#F0B429;--star-bg:#4A3A10;--star-ink:#FFD979} }
+:root[data-theme="dark"]{--star:#F0B429;--star-bg:#4A3A10;--star-ink:#FFD979}
+.srow{display:flex;align-items:center;gap:8px;width:min(100%,420px)}
+.srow .search{flex:1;min-width:0;width:auto}
+.stbar{appearance:none;display:inline-flex;align-items:center;gap:5px;height:38px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font:inherit;font-size:13px;font-weight:700;cursor:pointer;flex:none}
+.stbar .ic{color:var(--star);font-size:15px;line-height:1}
+.stbar[aria-pressed="true"]{background:var(--star-bg);border-color:var(--star);color:var(--star-ink)}
+.cell.star::after{content:"★";position:absolute;top:2px;right:4px;font-size:11px;line-height:1;color:var(--star)}
+.cell.on.star::after{color:#fff}
+.detail .dno .st{font-style:normal;color:var(--star);margin-left:4px}
+.bcard .stbtn{position:absolute;right:8px;bottom:8px;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;font-size:17px;line-height:1;color:var(--ink-3);cursor:pointer;transition:transform .15s ease}
+.bcard .stbtn:hover{transform:scale(1.15);background:var(--surface-2)}
+.bcard.star .stbtn{color:var(--star)}
+.bcard .bs{padding-right:30px}
+.mhead .dx.mstar{font-size:17px;color:var(--ink-3)}
+.mhead .dx.mstar.on{color:var(--star);border-color:var(--star);background:var(--star-bg)}
 /* 맨 위로 */
 .totop{position:fixed;right:16px;bottom:calc(16px + var(--lift,0px) + env(safe-area-inset-bottom,0px));z-index:40;transition:opacity .25s ease,transform .25s ease,bottom .2s ease;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--panel);
   box-shadow:var(--shadow);display:grid;place-items:center;cursor:pointer;opacity:0;transform:translateY(10px);pointer-events:none}
@@ -433,7 +452,7 @@ a.textlink{text-decoration:none}
 .sidecol .cell{width:52px;height:56px}
 .sidecol .mk{width:52px;height:56px;padding:0;font-size:10.5px;line-height:1.2}
 .sidegap{height:20px}
-.cell{width:52px;height:56px;flex:none;border-radius:7px;border:1px solid color-mix(in srgb,var(--c) 16%,var(--ct));background:var(--ct);color:var(--ink);cursor:pointer;
+.cell{position:relative;width:52px;height:56px;flex:none;border-radius:7px;border:1px solid color-mix(in srgb,var(--c) 16%,var(--ct));background:var(--ct);color:var(--ink);cursor:pointer;
   padding:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;overflow:hidden;
   transition:transform .12s ease, box-shadow .12s ease, background-color .12s ease}
 .cell .no{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace;font-size:16px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em;color:var(--c)}
@@ -448,6 +467,16 @@ a.textlink{text-decoration:none}
 .cell.ctr{--c:var(--fc);--ct:var(--fct)}
 @media (prefers-reduced-motion:reduce){.cell{transition:none}.cell:hover,.cell.on{transform:none}}
 .hint{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-3);margin-top:8px}
+/* 배치도 첫 안내 (부스를 하나 누르면 사라짐) */
+.planhint{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 0 12px;font-size:13px;font-weight:600;color:var(--panel);
+  background:color-mix(in srgb,var(--panel) 8%,var(--surface));border:1px dashed color-mix(in srgb,var(--panel) 35%,var(--surface));border-radius:999px;padding:8px 14px}
+.planhint svg{width:18px;height:18px;flex:none}
+.planhint[hidden]{display:none}
+/* 다른 요일 검색 안내 */
+.xday{margin:0;font-size:13px;color:var(--ink-2);text-align:center;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 8px}
+.xday b{color:var(--ink);font-weight:700}
+.xday .xgo{appearance:none;border:1px solid var(--panel);background:var(--surface);color:var(--panel);font:inherit;font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:999px;cursor:pointer}
+.xday .xgo:hover{background:color-mix(in srgb,var(--panel) 10%,var(--surface))}
 @media(min-width:1290px){.hint{display:none}}
 .detail{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:20;margin-top:14px;background:var(--surface);border:1px solid var(--line);
   border-left:5px solid var(--c,var(--line));border-radius:10px;box-shadow:var(--shadow);padding:11px 14px;cursor:pointer;
@@ -537,7 +566,7 @@ a.textlink{text-decoration:none}
 .mtxt span{font-size:12.5px;color:var(--ink-2);margin-top:2px}
 .mhead .dx{margin-left:auto;appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font-size:13px;cursor:pointer;width:32px;height:32px;border-radius:8px;flex:none}
 .pframe{margin:0 18px;background:var(--surface-2);border:1px solid var(--line-2);border-radius:10px;min-height:220px;display:grid;place-items:center;overflow:hidden}
-.pframe img{display:block;width:100%;height:auto;max-height:72vh;object-fit:contain}
+.pframe img{display:block;width:100%;height:auto;max-height:72vh;object-fit:contain;cursor:zoom-in}
 /* 여러 장짜리 포스터: 세로로 이어 붙이고 각 장 위에 쪽수 */
 .pframe.multi{display:block;max-height:72vh;overflow:auto;-webkit-overflow-scrolling:touch}
 .pframe.multi img{max-height:none}
@@ -744,7 +773,7 @@ footer b{color:var(--ink-2);font-weight:600}
         <h1>2026 제8회<br>창의융합교육축제</h1>
         <dl class="infotable">
           <dt>일시</dt><dd>2026. 10. 29.(목) – 10. 30.(금)<small>체험부스<br>10. 29.(목) <span data-hours="thu"></span><br>10. 30.(금) <span data-hours="fri"></span></small></dd>
-          <dt>장소</dt><dd><span data-cfg="place">정부세종컨벤션센터</span><small>체험마당 2층 기획전시실 · 공유마당 4층 연회장</small></dd>
+          <dt>장소</dt><dd><span data-cfg="place">정부세종컨벤션센터</span><small>체험마당 2층 기획전시장 · 공유마당 4층 연회장</small></dd>
           <dt>대상</dt><dd>학생 · 학부모 · 교원 · 시민 누구나<small>참여 인원 5,000여 명 예상</small></dd>
           <dt>구성</dt><dd>체험 · 전시 · 공유 · 공연 · 대회마당</dd>
           <dt>주최·주관</dt><dd>세종특별자치시교육청</dd>
@@ -787,7 +816,7 @@ footer b{color:var(--ink-2);font-weight:600}
     <div class="blk">
       <div class="blk-head"><h2>행사장 안내</h2><p>정부세종컨벤션센터 층별 구성</p></div>
       <div class="floors">
-        <div class="card floor"><b>2F</b><strong>기획전시실</strong><span>체험마당 82개 부스 · 개막식 · 학생 오케스트라 공연 · 안내부스 · 보건부스</span></div>
+        <div class="card floor"><b>2F</b><strong>기획전시장</strong><span>체험마당 82개 부스 · 개막식 · 학생 오케스트라 공연 · 안내부스 · 보건부스</span></div>
         <div class="card floor"><b>2F</b><strong>로비</strong><span>제13회 수학구조물대회 수상작 전시 · 포토존</span></div>
         <div class="card floor"><b>4F</b><strong>대연회장 · 중연회장 · 소연회장</strong><span>공유마당 — 이도리더프로그램 · 이도학생학습공동체 · AI 중점학교 · AI·디지털활용 선도학교 성과 공유회</span></div>
         <div class="card floor"><b>4F</b><strong>로비</strong><span>전국과학대회 수상작 전시</span></div>
@@ -818,6 +847,7 @@ footer b{color:var(--ink-2);font-weight:600}
   <div class="blk">
     <div class="controls"><div class="wrap-wide ctl" data-controls></div></div>
     <div class="wrap-wide">
+      <p class="planhint" id="planHint"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3v9l-2-2M7 12l4-1 4 2v3H9l-4-5"/></svg>부스를 누르면 포스터와 프로그램 안내를 볼 수 있어요</p>
       <div class="plan plan-desk" id="plan">
         <div class="plan-inner">
           <!-- 위·아래 벽의 표지(화장실 · 입구 · 주출입구)는 스크립트의 PLAN_MARKS에서 부스 칸에 맞춰 그립니다 -->
@@ -879,7 +909,7 @@ footer b{color:var(--ink-2);font-weight:600}
     <div class="blk madang">
       <div class="card md" style="--c:var(--m1)">
         <div class="mh"><b>체험마당</b><span>10.29 – 10.30</span></div>
-        <dl><dt>운영</dt><dd>목 <span data-hours="thu"></span> · 금 <span data-hours="fri"></span></dd><dt>장소</dt><dd>2층 기획전시실</dd><dt>규모</dt><dd>수학 45 · 과학융합 20 · 정보 15 · 환경 2 · 발명 3부스 + 수학체험센터</dd><dt>운영</dt><dd>부스 운영 교사 86명 · 학생 520명 내외</dd></dl>
+        <dl><dt>운영</dt><dd>목 <span data-hours="thu"></span> · 금 <span data-hours="fri"></span></dd><dt>장소</dt><dd>2층 기획전시장</dd><dt>규모</dt><dd>수학 45 · 과학융합 20 · 정보 15 · 환경 2 · 발명 3부스 + 수학체험센터</dd><dt>운영</dt><dd>부스 운영 교사 86명 · 학생 520명 내외</dd></dl>
         <button type="button" class="textlink sm" data-go="program/map">배치도 보기<svg class="tl-arr" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5"/></svg></button>
       </div>
       <div class="card md" style="--c:var(--m3)">
@@ -943,7 +973,7 @@ footer b{color:var(--ink-2);font-weight:600}
       <dl class="card">
         <dt>장소</dt><dd><span data-cfg="place">정부세종컨벤션센터</span></dd>
         <dt>주소</dt><dd><span data-cfg="address">세종 다솜3로 66</span></dd>
-        <dt>체험부스</dt><dd>2층 기획전시실<br><small style="color:var(--ink-2)">목 <span data-hours="thu"></span> · 금 <span data-hours="fri"></span></small></dd>
+        <dt>체험부스</dt><dd>2층 기획전시장<br><small style="color:var(--ink-2)">목 <span data-hours="thu"></span> · 금 <span data-hours="fri"></span></small></dd>
         <dt>공유마당</dt><dd>4층 대연회장 · 중연회장 · 소연회장</dd>
       </dl>
       <ul class="tips card">
@@ -1019,6 +1049,7 @@ footer b{color:var(--ink-2);font-weight:600}
     <div class="mhead">
       <span class="dno" id="mNo"></span>
       <div class="mtxt"><b id="mTitle"></b><span id="mMeta"></span></div>
+      <button type="button" class="dx mstar" id="mStar" aria-pressed="false" aria-label="별표">☆</button>
       <button type="button" class="dx" id="mClose" aria-label="닫기">✕</button>
     </div>
     <div class="pframe" id="mFrame"></div>
@@ -1074,7 +1105,7 @@ var CONFIG = {
     thu: [
       { track:'stage',   t:'10:00–11:20', n:'개막식',                               w:'2층 기획전시장' },
       { track:'stage',   t:'14:30–15:30', n:'세종시 관내 학생 오케스트라 공연',        w:'2층 기획전시장' },
-      { track:'booth',   t:'',            n:'체험부스 운영',                         w:'2층 기획전시실' },
+      { track:'booth',   t:'',            n:'체험부스 운영',                         w:'2층 기획전시장' },
       { track:'share',   t:'14:00–17:00', n:'세종이도리더프로그램 성과 공유회',        w:'4층 대연회장' },
       { track:'share',   t:'14:00–17:00', n:'세종이도학생학습공동체 성과 공유회',      w:'4층 소연회장' },
       { track:'share',   t:'15:00–17:00', n:'AI 중점학교 · AI·디지털활용 선도학교 성과 공유회', w:'4층 중연회장' },
@@ -1082,7 +1113,7 @@ var CONFIG = {
       { track:'exhibit', t:'',            n:'제13회 수학구조물대회 수상작 전시',       w:'2층 로비' }
     ],
     fri: [
-      { track:'booth',   t:'',            n:'체험부스 운영',                         w:'2층 기획전시실' },
+      { track:'booth',   t:'',            n:'체험부스 운영',                         w:'2층 기획전시장' },
       { track:'exhibit', t:'',            n:'전국과학대회 수상작 전시',               w:'4층 로비' },
       { track:'exhibit', t:'',            n:'제13회 수학구조물대회 수상작 전시',       w:'2층 로비' }
     ]
@@ -1106,7 +1137,7 @@ var FIELDS = [
 ];
 var ALL_TRACKS = [
   { k:'stage',   label:'개막식 · 공연', sub:'2층 기획전시장',  c:'var(--m5)' },
-  { k:'booth',   label:'체험마당',      sub:'2층 기획전시실',  c:'var(--m1)' },
+  { k:'booth',   label:'체험마당',      sub:'2층 기획전시장',  c:'var(--m1)' },
   { k:'share',   label:'공유마당',      sub:'4층 연회장',      c:'var(--m2)' },
   { k:'exhibit', label:'전시마당',      sub:'2층 · 4층 로비',  c:'var(--m3)' }
 ];
@@ -1182,7 +1213,22 @@ var SKY_LAYOUT_BAND   = [ [1,.50,.30,.46], [0,.82,.62,.55], [2,.28,.60,.34] ];
 var fmap = {}; FIELDS.forEach(function(f){ fmap[f.k] = f; });
 var CENTER_COLOR = { c:'var(--fc)', t:'var(--fct)' };   // 수학체험센터 운영부스 — 리플렛 하늘색
 function colorOf(bt){ return bt[1] === 0 ? CENTER_COLOR : fmap[bt[0]]; }
-var state = { day:'thu', field:'all', q:'', sel:{ i:0, side:false } };
+var state = { day:'thu', field:'all', q:'', sel:null, starOnly:false };   // 처음에는 아무 부스도 선택하지 않음
+/* ══ 별표(내 부스) — 이 기기 안에만 저장 (localStorage). 요일별로 '분야-번호' 목록 ══ */
+var STAR_KEY = 'cf8.stars';
+function loadStars(){ try { var v = JSON.parse(localStorage.getItem(STAR_KEY) || '{}'); return { thu: v.thu || [], fri: v.fri || [] }; } catch (e) { return { thu:[], fri:[] }; } }
+var stars = loadStars();
+function saveStars(){ try { localStorage.setItem(STAR_KEY, JSON.stringify(stars)); } catch (e) {} }
+function boothKey(bt){ return bt[0] + '-' + bt[1]; }
+function isStar(day, bt){ return stars[day].indexOf(boothKey(bt)) !== -1; }
+function starCount(day){ return stars[day].length; }
+function toggleStar(day, bt){
+  var k = boothKey(bt), a = stars[day], i = a.indexOf(k);
+  if (i === -1) a.push(k); else a.splice(i, 1);
+  saveStars();
+  if (state.starOnly && !starCount(state.day)) state.starOnly = false;   // 마지막 별을 지우면 '내 부스만' 해제
+  syncAll();
+}
 // 검색: 학교 이름 · 프로그램 이름 · '수학-3' 같은 번호를 띄어쓰기·하이픈 없이 비교
 function normQ(t){ return String(t || '').toLowerCase().replace(/[\s\-·.]/g, ''); }
 var FIELD_ALIAS = { '수학':'수학', '과학':'과학융합', '과학융합':'과학융합', '정보':'정보', '환경':'환경', 'sw':'정보', '발명':null };
@@ -1351,6 +1397,7 @@ function renderControls(){
     });
     host.appendChild(chips);
     // 검색창 — 학교 이름, 프로그램 이름, 부스 번호(수학-3)
+    var srow = document.createElement('div'); srow.className = 'srow';
     var sb = document.createElement('div'); sb.className = 'search';
     sb.innerHTML = '<svg class="s-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="6"/><path d="M14 14l4 4"/></svg>' +
       '<input type="search" placeholder="학교 · 프로그램 · 부스 번호 검색" aria-label="부스 검색" autocomplete="off" enterkeyhint="search">' +
@@ -1359,8 +1406,22 @@ function renderControls(){
     inp.addEventListener('input', function(){ state.q = inp.value; syncAll(); });
     inp.addEventListener('keydown', function(e){ if (e.key === 'Escape') { inp.value = ''; state.q = ''; syncAll(); } });
     sx.addEventListener('click', function(){ state.q = ''; syncAll(); inp.focus(); });
-    host.appendChild(sb);
+    srow.appendChild(sb);
+    // ★ 내 부스만 보기
+    var st = document.createElement('button'); st.type = 'button'; st.className = 'stbar'; st.setAttribute('aria-pressed', 'false');
+    st.innerHTML = '<span class="ic">★</span><span class="n">0</span>'; st.title = '별표한 부스만 보기';
+    st.addEventListener('click', function(){ state.starOnly = !state.starOnly; syncAll(); });
+    srow.appendChild(st);
+    host.appendChild(srow);
+    // 다른 날짜에도 검색 결과가 있으면 알려 주는 줄
+    var xd = document.createElement('p'); xd.className = 'xday'; xd.hidden = true; host.appendChild(xd);
   });
+}
+// 검색어·분야에 맞는 부스 수 (요일별)
+function countMatches(day){
+  var set = BOOTHS[day], n = 0;
+  set.grid.concat(set.side).forEach(function(b){ if (b[1] !== 0 && matchQ(b) && (state.field === 'all' || state.field === b[0])) n++; });
+  return n;
 }
 function syncControls(){
   document.querySelectorAll('[data-controls] .dayseg button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.day === state.day ? 'true' : 'false'); });
@@ -1368,6 +1429,21 @@ function syncControls(){
   document.querySelectorAll('[data-controls] .search').forEach(function(sb){
     var inp = sb.querySelector('input'); if (inp.value !== state.q) inp.value = state.q;
     sb.querySelector('.s-x').hidden = !state.q; sb.classList.toggle('on', !!state.q);
+  });
+  var sc = starCount(state.day);
+  document.querySelectorAll('[data-controls] .stbar').forEach(function(b){
+    b.setAttribute('aria-pressed', state.starOnly ? 'true' : 'false'); b.querySelector('.n').textContent = sc;
+    b.setAttribute('aria-label', '별표한 부스 ' + sc + '개' + (state.starOnly ? ' — 전체 보기로' : '만 보기'));
+  });
+  // 다른 요일 안내: "DAY 2 · 10월 30일(금)에도 '조치원' 부스 3개" + 보기 버튼
+  var other = state.day === 'thu' ? 'fri' : 'thu', od = dayOf(other), oi = DAYS.indexOf(od) + 1;
+  var n = state.q.trim() ? countMatches(other) : 0;
+  document.querySelectorAll('[data-controls] .xday').forEach(function(xd){
+    if (state.starOnly && !sc) { xd.hidden = false; xd.innerHTML = '아직 별표한 부스가 없어요. 부스 포스터 창의 <b>☆</b>을 눌러 담아 두세요.'; return; }
+    xd.hidden = !n;
+    if (!n) return;
+    xd.innerHTML = 'DAY ' + oi + ' · ' + esc(od.d) + '(' + od.w + ')에도 <b>"' + esc(state.q.trim()) + '"</b> 부스가 <b>' + n + '개</b> 있습니다 <button type="button" class="xgo">DAY ' + oi + ' 보기 ›</button>';
+    xd.querySelector('.xgo').onclick = function(){ state.day = other; syncAll(); };
   });
 }
 function syncAll(){
@@ -1473,7 +1549,8 @@ function makeCell(i, isSide){
 function paint(){
   cells.forEach(function(el){
     var i = +el.dataset.i, isSide = !!el.dataset.side, bt = boothAt(i, isSide), f = colorOf(bt);
-    var ctr = (bt[1] === 0), dim = (state.field !== 'all' && state.field !== bt[0]) || !matchQ(bt);
+    var ctr = (bt[1] === 0), dim = (state.field !== 'all' && state.field !== bt[0]) || !matchQ(bt) || (state.starOnly && !isStar(state.day, bt));
+    el.classList.toggle('star', isStar(state.day, bt));
     el.classList.toggle('ctr', ctr);
     el.querySelector('.no').textContent = ctr ? '수학' : bt[1];
     el.querySelector('.sch').textContent = ctr ? '체험센터' : splitName(bt[2] || '');
@@ -1488,13 +1565,14 @@ function paint(){
   renderDetail();
 }
 function renderDetail(){
-  var el = document.getElementById('detail');
+  var el = document.getElementById('detail'), hint = document.getElementById('planHint');
   if (window.fitFab) requestAnimationFrame(window.fitFab);
+  if (hint && state.sel) hint.hidden = true;                      // 한 번 눌러 보면 안내 문구는 치움
   if (!state.sel) { el.hidden = true; return; }
   var bt = boothAt(state.sel.i, state.sel.side), f = colorOf(bt), day = dayOf(state.day), ctr = (bt[1] === 0);
   var meta = []; if (bt[2]) meta.push(bt[2]); meta.push(ctr ? '수학 체험 부스' : bt[0] + ' 부스'); meta.push(day.d + '(' + day.w + ') ' + ((CONFIG.hours || {})[state.day] || '운영'));
   el.hidden = false; el.style.setProperty('--c', f.c); el.style.setProperty('--ct', f.t);
-  el.innerHTML = '<span class="dno">' + (ctr ? '수학체험센터' : bt[1]) + '</span>' +
+  el.innerHTML = '<span class="dno">' + (ctr ? '수학체험센터' : bt[1]) + (isStar(state.day, bt) ? '<i class="st">★</i>' : '') + '</span>' +
     '<span class="dtxt"><span class="dsch">' + esc(bt[3] || bt[2] || '프로그램 미정') + '</span><span class="dmeta">' + esc(meta.join(' · ')) + '</span></span>' +
     '<span class="dgo">포스터 다시 보기 <i>›</i></span>' +
     '<button type="button" class="dx" aria-label="닫기">✕</button>';
@@ -1569,6 +1647,11 @@ function openBooth(i, isSide){
     frame.innerHTML = '<div class="pph"><b>포스터 준비 중</b><span>부스 포스터가 완성되면 여기에서 볼 수 있습니다.</span></div>'; };
   frame.classList.remove('multi');
   img.src = url;
+  // ☆ 별표 버튼
+  var ms = document.getElementById('mStar'); ms.hidden = false;
+  var paintStar = function(){ var on = isStar(state.day, bt); ms.textContent = on ? '★' : '☆'; ms.setAttribute('aria-pressed', on ? 'true' : 'false'); ms.classList.toggle('on', on); ms.title = on ? '별표 지우기' : '별표 (내 부스에 담기)'; };
+  paintStar();
+  ms.onclick = function(){ toggleStar(state.day, bt); paintStar(); };
   // 배치도에서 연 모달에는 '배치도에서 위치 보기'가 필요 없음 (이미 그 칸이 강조되어 있음)
   document.getElementById('mMap').hidden = (cur.page === 'program' && cur.sub === 'map');
   document.getElementById('mMap').onclick = function(){ closeModal(); go('program', 'map'); setTimeout(function(){ select(i, isSide, true); }, 60); };
@@ -1603,6 +1686,7 @@ function openInvention(){
     im.src = invUrl(n);
   })(1);
   document.getElementById('mMap').hidden = true;                 // 발명부스는 배치도 칸이 없음
+  document.getElementById('mStar').hidden = true;
   modalReturn = document.activeElement;
   m.hidden = false; document.body.style.overflow = 'hidden';
   document.getElementById('mClose').focus();
@@ -1617,9 +1701,16 @@ function closeModal(){
   m.hidden = true; document.body.style.overflow = '';
   if (modalReturn && modalReturn.focus) modalReturn.focus();
 }
+// 포스터를 누르면 전체 화면으로 크게 (한 번 더 누르면 실제 크기, 끌어서 이동)
+document.getElementById('mFrame').addEventListener('click', function(e){
+  var img = e.target.closest('img'); if (!img || !window.openLightbox) return;
+  var title = document.getElementById('mTitle').textContent, no = document.getElementById('mNo').textContent;
+  var tag = img.previousElementSibling && img.previousElementSibling.classList.contains('pno') ? ' · ' + img.previousElementSibling.textContent : '';
+  window.openLightbox(img.currentSrc || img.src, title + tag, img.alt, (no + '_' + title).replace(/[\\/:*?"<>|]/g, '') + '.jpg', img.naturalHeight > img.naturalWidth);
+});
 document.getElementById('mClose').addEventListener('click', closeModal);
 document.getElementById('modal').addEventListener('click', function(e){ if (e.target === this) closeModal(); });
-document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', function(e){ var lb = document.getElementById('lightbox'); if (e.key === 'Escape' && (!lb || lb.hidden)) closeModal(); });
 
 /* ══ 부스 목록 ══ */
 function renderBooths(){
@@ -1631,7 +1722,7 @@ function renderBooths(){
   var any = false, total = 0;
   FIELDS.forEach(function(f){
     if (state.field !== 'all' && state.field !== f.k) return;
-    var list = items.filter(function(x){ return x.b[0] === f.k && matchQ(x.b); });
+    var list = items.filter(function(x){ return x.b[0] === f.k && matchQ(x.b) && (!state.starOnly || isStar(state.day, x.b)); });
     total += list.length;
     if (!list.length) return;
     any = true;
@@ -1642,10 +1733,14 @@ function renderBooths(){
       var bt = x.b, ctr = bt[1] === 0;
       var c = document.createElement('button'); c.type = 'button'; c.className = 'bcard';
       var fc = colorOf(bt); c.style.setProperty('--c', fc.c); c.style.setProperty('--ct', fc.t);
+      var on = isStar(state.day, bt);
+      c.classList.toggle('star', on);
       c.innerHTML = '<span class="bno">' + (ctr ? '수학체험센터' : f.k + '-' + bt[1]) + '</span>' +
         '<span class="bp">' + esc(bt[3] || '프로그램 미정') + '</span>' +
-        '<span class="bs">' + esc(bt[2] || '') + '</span>';
-      c.addEventListener('click', function(){ openBooth(x.i, x.side); });
+        '<span class="bs">' + esc(bt[2] || '') + '</span>' +
+        '<span class="stbtn" role="button" tabindex="0" aria-pressed="' + on + '" aria-label="별표">' + (on ? '★' : '☆') + '</span>';
+      c.addEventListener('click', function(e){ if (e.target.closest('.stbtn')) { e.stopPropagation(); toggleStar(state.day, bt); return; } openBooth(x.i, x.side); });
+      c.querySelector('.stbtn').addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); toggleStar(state.day, bt); } });
       probePoster(posterUrl(state.day, bt), function(ok){
         if (ok && !c.querySelector('.pb')) { var tag = document.createElement('span'); tag.className = 'pb'; tag.textContent = '포스터'; c.appendChild(tag); }
       });
@@ -1653,7 +1748,7 @@ function renderBooths(){
     });
     host.appendChild(g);
   });
-  if (!any) host.innerHTML = '<div class="card empty">' + (state.q ? '"' + esc(state.q) + '"에 맞는 부스가 없습니다.' : '해당하는 부스가 없습니다.') + '</div>';
+  if (!any) host.innerHTML = '<div class="card empty">' + (state.starOnly && !starCount(state.day) ? '아직 별표한 부스가 없습니다. 부스 포스터 창의 ☆을 눌러 담아 두세요.' : state.q ? '"' + esc(state.q) + '"에 맞는 부스가 없습니다.' : '해당하는 부스가 없습니다.') + '</div>';
   else if (state.q) { var n = document.createElement('p'); n.className = 'srnote'; n.textContent = '"' + state.q + '" 검색 결과 ' + total + '개'; host.insertBefore(n, host.firstChild); }
 }
 
@@ -1806,20 +1901,28 @@ document.querySelectorAll('[data-hours]').forEach(function(el){
     var sync = function(){ if (img.naturalWidth) dl.href = srcOf(img); };
     if (img.complete && img.naturalWidth) sync(); img.addEventListener('load', sync);
   });
-  function open(i){
-    var fig = figs[i], img = fig.querySelector('img'), cap = fig.querySelector('figcaption b');
-    if (!img.naturalWidth) return;
-    lbImg.className = 'fit'; lbImg.src = srcOf(img); lbImg.alt = img.alt;
-    lbTitle.textContent = '리플렛 ' + (cap ? cap.textContent : '');
-    lbDl.href = srcOf(img); lbDl.download = fig.querySelector('.lfdl').download || '리플렛.jpg';
+  // 공용: 어떤 그림이든 크게 보기 (리플렛 · 부스 포스터)
+  function openAny(src, title, alt, dlName, portrait){
+    lbImg.className = 'fit'; lbImg.src = src; lbImg.alt = alt || '';
+    lb.classList.toggle('portrait', !!portrait);
+    lbTitle.textContent = title || '';
+    lbDl.href = src; lbDl.download = dlName || '이미지.jpg';
     returnTo = document.activeElement;
     lb.hidden = false; document.body.style.overflow = 'hidden';
     lbScroll.scrollTo(0, 0);
     document.getElementById('lbClose').focus();
   }
+  window.openLightbox = openAny;
+  function open(i){
+    var fig = figs[i], img = fig.querySelector('img'), cap = fig.querySelector('figcaption b');
+    if (!img.naturalWidth) return;
+    openAny(srcOf(img), '리플렛 ' + (cap ? cap.textContent : ''), img.alt, fig.querySelector('.lfdl').download || '리플렛.jpg', false);
+  }
   function close(){
     if (lb.hidden) return;
-    lb.hidden = true; document.body.style.overflow = '';
+    lb.hidden = true;
+    var modal = document.getElementById('modal');
+    document.body.style.overflow = (modal && !modal.hidden) ? 'hidden' : '';   // 포스터 모달 위에서 열었으면 모달은 그대로
     if (returnTo && returnTo.focus) returnTo.focus();
   }
   document.querySelectorAll('.lfbtn').forEach(function(b){ b.addEventListener('click', function(){ open(+b.dataset.lf); }); });
